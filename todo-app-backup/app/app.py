@@ -1,0 +1,218 @@
+import os
+import logging
+from datetime import datetime
+from functools import wraps
+
+from flask import Flask, request, jsonify, render_template, redirect, url_for
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, scoped_session
+from dotenv import load_dotenv
+
+
+load_dotenv()
+
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+
+app = Flask(__name__)
+
+
+TASKS_DB_HOST = os.getenv('TASKS_DB_HOST', 'localhost')
+TASKS_DB_PORT = os.getenv('TASKS_DB_PORT', '5432')
+TASKS_DB_USER = os.getenv('TASKS_DB_USER', 'postgres')
+TASKS_DB_PASSWORD = os.getenv('TASKS_DB_PASSWORD', 'admin')
+TASKS_DB_NAME = os.getenv('TASKS_DB_NAME', 'task')
+
+LOGS_DB_HOST = os.getenv('LOGS_DB_HOST', 'localhost')
+LOGS_DB_PORT = os.getenv('LOGS_DB_PORT', '5433')
+LOGS_DB_USER = os.getenv('LOGS_DB_USER', 'postgres')
+LOGS_DB_PASSWORD = os.getenv('LOGS_DB_PASSWORD', 'admin')
+LOGS_DB_NAME = os.getenv('LOGS_DB_NAME', 'logs')
+
+app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{TASKS_DB_USER}:{TASKS_DB_PASSWORD}@{TASKS_DB_HOST}:{TASKS_DB_PORT}/{TASKS_DB_NAME}"
+app.config['SQLALCHEMY_BINDS'] = {
+    'logs': f"postgresql://{LOGS_DB_USER}:{LOGS_DB_PASSWORD}@{LOGS_DB_HOST}:{LOGS_DB_PORT}/{LOGS_DB_NAME}"
+}
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
+
+class Task(db.Model):
+    __tablename__ = 'tasks'
+    __bind_key__ = None
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200), nullable=False)
+    completed = db.Column(db.Boolean, default=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'completed': self.completed,
+            'created_at': self.created_at.isoformat() if self.created_at else None
+        }
+
+
+
+class Log(db.Model):
+    __tablename__ = 'logs'
+    __bind_key__ = 'logs'
+
+    id = db.Column(db.Integer, primary_key=True)
+    action = db.Column(db.String(50), nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    ip = db.Column(db.String(50))
+    user_agent = db.Column(db.String(250))
+    method = db.Column(db.String(10))
+    path = db.Column(db.String(200))
+    task_id = db.Column(db.Integer, nullable=True)
+    task_title = db.Column(db.String(200), nullable=True)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'action': self.action,
+            'timestamp': self.timestamp.isoformat() if self.timestamp else None,
+            'ip': self.ip,
+            'user_agent': self.user_agent,
+            'method': self.method,
+            'path': self.path,
+            'task_id': self.task_id,
+            'task_title': self.task_title
+        }
+
+
+
+def log_to_postgres(action):
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            response = f(*args, **kwargs)
+
+            try:
+                log_entry = Log(
+                    action=action,
+                    ip=request.remote_addr,
+                    user_agent=request.user_agent.string if request.user_agent else None,
+                    method=request.method,
+                    path=request.path
+                )
+
+                if action == 'add' and request.method == 'POST':
+                    log_entry.task_title = request.form.get('title', '')
+                elif action in ['complete', 'delete']:
+                    task_id = kwargs.get('id')
+                    log_entry.task_id = task_id
+
+
+                    task = Task.query.get(task_id)
+                    if task:
+                        log_entry.task_title = task.title
+
+
+                db.session.add(log_entry)
+                db.session.commit()
+
+                logger.info(f"Logged action to PostgreSQL logs DB: {action}")
+            except Exception as e:
+                logger.error(f"Failed to log to PostgreSQL logs DB: {e}")
+                db.session.rollback()
+
+            return response
+
+        return decorated_function
+
+    return decorator
+
+
+@app.route('/')
+def index():
+    tasks = Task.query.order_by(Task.created_at.desc()).all()
+    return render_template('index.html', tasks=tasks)
+
+
+@app.route('/add', methods=['POST'])
+@log_to_postgres('add')
+def add_task():
+    title = request.form.get('title', '').strip()
+    if title:
+        task = Task(title=title)
+        db.session.add(task)
+        db.session.commit()
+    return redirect(url_for('index'))
+
+
+@app.route('/complete/<int:id>')
+@log_to_postgres('complete')
+def complete_task(id):
+    task = Task.query.get_or_404(id)
+    task.completed = True
+    db.session.commit()
+    return redirect(url_for('index'))
+
+
+@app.route('/delete/<int:id>')
+@log_to_postgres('delete')
+def delete_task(id):
+    task = Task.query.get_or_404(id)
+    db.session.delete(task)
+    db.session.commit()
+    return redirect(url_for('index'))
+
+
+@app.route('/health')
+def health():
+    health_status = {
+        'status': 'healthy',
+        'timestamp': datetime.utcnow().isoformat(),
+        'services': {
+            'postgresql_tasks': 'unknown',
+            'postgresql_logs': 'unknown'
+        }
+    }
+
+
+    try:
+        db.session.execute('SELECT 1')
+        health_status['services']['postgresql_tasks'] = 'connected'
+    except Exception as e:
+        health_status['services']['postgresql_tasks'] = f'error: {str(e)}'
+        health_status['status'] = 'unhealthy'
+
+
+    try:
+
+        logs_engine = db.get_engine(app, bind='logs')
+        with logs_engine.connect() as conn:
+            conn.execute('SELECT 1')
+        health_status['services']['postgresql_logs'] = 'connected'
+    except Exception as e:
+        health_status['services']['postgresql_logs'] = f'error: {str(e)}'
+        health_status['status'] = 'unhealthy'
+
+    return jsonify(health_status)
+
+
+@app.route('/logs')
+def show_logs():
+
+    try:
+
+        logs = Log.query.order_by(Log.timestamp.desc()).limit(10).all()
+        return render_template('logs.html', logs=logs)
+    except Exception as e:
+        return f"Error fetching logs: {e}", 500
+
+
+
+with app.app_context():
+
+    db.create_all()
+
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=5000)

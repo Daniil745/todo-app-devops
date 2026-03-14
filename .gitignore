@@ -1,0 +1,19 @@
+# Секреты и ключи
+.env
+*.pem
+*.key
+id_rsa
+id_rsa.pub
+.ssh/
+
+.DS_Store
+Thumbs.db
+
+__pycache__/
+*.pyc
+*.pyo
+*.log
+
+portainer_data/
+*.db
+*.sqlite3

@@ -1,0 +1,48 @@
+---
+- name: Deploy Application to Staging or Production
+  hosts: todo_servers
+  become: yes
+
+  tasks:
+    - name: Ensure project directory exists on server
+      file:
+        path: /home/user/projects/todo-app
+        state: directory
+        owner: user
+        group: user
+      become: yes
+
+    - name: Copy all aplication files from Windows to server
+      synchronize:
+        src: /mnt/d/projects/todo-app-backup/
+        dest: /home/daniil/projects/todo-app/
+        rsync_opts:
+          - "--exclude=portainer_data"
+          - "--exclude=.git"
+          - "--exclude=__pycache__"
+          - "--exclude=*.pyc"
+          - "--exclude=*.logs"
+      become: no
+
+    - name: Rebuild and restart containers
+      shell:
+        cmd: |
+          cd /home/user/projects/todo-app
+          docker compose down
+          docker compose up -d --build
+      register: result
+      become: yes
+
+    - name: Wait for app to be healthy
+      wait_for:
+        port: 5001
+        host: 0.0.0.0
+        delay: 10
+        timeout: 60
+
+    - name: Show deployment result
+      debug:
+        msg:
+          - "App deployed to http://192.168.1.103:5001"
+          - "Grafana: http://192.168.1.103:3000 (admin/admin)"
+          - "Portainer: http://192.168.1.103:9000"
