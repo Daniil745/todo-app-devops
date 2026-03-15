@@ -43,6 +43,6 @@
     - name: Show deployment result
       debug:
         msg:
-          - "App deployed to http://192.168.1.103:5001"
-          - "Grafana: http://192.168.1.103:3000 (admin/admin)"
-          - "Portainer: http://192.168.1.103:9000"
+          - "App deployed to http://your-ip-address:5001"
+          - "Grafana: http://your-ip-address:3000 (admin/admin)"
+          - "Portainer: http://your-ip-address:9000"
