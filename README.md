@@ -73,7 +73,6 @@ todo-app-devops/
 ├── .gitignore
 ├── README.md
 ├── docker-compose.yml
-├── inventory.example.ini
 ├── app/
 │   ├── Dockerfile
 │   ├── app.py
@@ -88,8 +87,9 @@ todo-app-devops/
 │   └── prometheus.yml
 ├── grafana/
 │   └── grafana.yml
-└── ansible/
+└── ansible-todo/
     └── deploy.yml
+    └──inventory.example.ini
 ```
 
 ##  Quick Start
