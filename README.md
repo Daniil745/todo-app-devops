@@ -1,4 +1,4 @@
-# 🚀 Production-Ready DevOps Stack with 11 Containers
+#  Production-Ready DevOps Stack with 11 Containers
 
 <div align="center">
 
@@ -15,20 +15,20 @@
 
 </div>
 
-## 📋 Overview
+##  Overview
 
 ![image alt](https://github.com/Daniil745/todo-app-devops/blob/68a33befac323f25527c2ee06d17a21eeebc68e0/screenshots/architecture.png)
 
 This project demonstrates a **production-ready DevOps stack** deployed on VirtualBox, consisting of **11 containers**, **2 PostgreSQL databases**, and **full monitoring** capabilities. It showcases best practices in containerization, orchestration, monitoring, and automation.
 
 ### Architecture Highlights
-- 🐳 11 containers in a unified Docker network
-- 🗄️ Dual PostgreSQL databases (Tasks + Logs)
-- 📊 Comprehensive monitoring stack
-- 🔧 Automated deployment with Ansible
-- 🚀 Load-tested and production-ready
+-  11 containers in a unified Docker network
+-  Dual PostgreSQL databases (Tasks + Logs)
+-  Comprehensive monitoring stack
+-  Automated deployment with Ansible
+-  Load-tested and production-ready
 
-## 🏗️ Technology Stack
+##  Technology Stack
 
 ### Base Infrastructure
 
@@ -66,7 +66,7 @@ This project demonstrates a **production-ready DevOps stack** deployed on Virtua
 | Portainer | Docker management | 9000 |
 | Ansible | Deployment automation | - |
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 todo-app-devops/
@@ -92,7 +92,7 @@ todo-app-devops/
     └── deploy.yml
 ```
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### Prerequisites
 - VirtualBox 7.x
@@ -101,13 +101,13 @@ todo-app-devops/
 
 ### Installation Steps
 
-**1️⃣ Clone the repository**
+**1️ Clone the repository**
 ```bash
 git clone https://github.com/Daniil745/todo-app-devops.git
 cd todo-app-devops
 ```
 
-**2️⃣ Configure environment**
+**2️ Configure environment**
 ```bash
 # Create .env file from example
 cp .env.example .env
@@ -115,18 +115,18 @@ cp .env.example .env
 nano .env
 ```
 
-**3️⃣ Launch the stack**
+**3️ Launch the stack**
 ```bash
 docker compose up -d
 ```
 
-**4️⃣ Verify deployment**
+**4️ Verify deployment**
 ```bash
 docker ps
 # You should see 11 running containers
 ```
 
-## 🌐 Service Access Points
+##  Service Access Points
 
 | Service | URL | Credentials |
 |---------|-----|-------------|
@@ -136,11 +136,11 @@ docker ps
 | Portainer | `http://your-ip-address:9000` | First login setup |
 | cAdvisor | `http://your-ip-address:8081` | - |
 
-## ⚙️ Ansible Deployment
+##  Ansible Deployment
 
 ### Automated Deployment
 
-**1️⃣ Configure inventory**
+**1️ Configure inventory**
 ```bash
 cd ansible-todo
 cp inventory.example.ini inventory.ini
@@ -148,7 +148,7 @@ cp inventory.example.ini inventory.ini
 nano inventory.ini
 ```
 
-**2️⃣ Run deployment**
+**2️ Run deployment**
 ```bash
 # Dry run (check mode)
 ansible-playbook -i inventory.ini deploy.yml --check --ask-become-pass
@@ -157,13 +157,13 @@ ansible-playbook -i inventory.ini deploy.yml --check --ask-become-pass
 ansible-playbook -i inventory.ini deploy.yml --ask-become-pass
 ```
 
-## 📊 Monitoring Dashboards
+##  Monitoring Dashboards
 
 - Node Exporter Dashboard: ![image alt](https://github.com/Daniil745/todo-app-devops/blob/68a33befac323f25527c2ee06d17a21eeebc68e0/screenshots/node%20exporter%20first%20dashboard.png)
 - PostgreSQL Dashboard:
 ![image alt](https://github.com/Daniil745/todo-app-devops/blob/68a33befac323f25527c2ee06d17a21eeebc68e0/screenshots/node%20exporter%20second%20dashboard.png)
 
-## 🏋️ Load Testing Results
+##  Load Testing Results
 
 ### Test Configuration
 - **Tool**: [hey](https://github.com/rakyll/hey)
@@ -180,10 +180,10 @@ ansible-playbook -i inventory.ini deploy.yml --ask-become-pass
 
 | Metric | Value | Rating |
 |--------|-------|--------|
-| Requests/sec | 134 RPS | ⭐ Excellent |
-| Avg Response Time | 65 ms | ⭐ Excellent |
-| Slowest Request | 1.15 s | ⚡ Average |
-| Errors | 0% | ⭐ Excellent |
+| Requests/sec | 134 RPS |  Excellent |
+| Avg Response Time | 65 ms |  Excellent |
+| Slowest Request | 1.15 s |  Average |
+| Errors | 0% |  Excellent |
 
 ### Iteration 2: 5,000 requests with 50 concurrency
 
@@ -195,10 +195,10 @@ ansible-playbook -i inventory.ini deploy.yml --ask-become-pass
 
 | Metric | Value | Rating |
 |--------|-------|--------|
-| Requests/sec | 196 RPS | ⭐ Excellent |
-| Avg Response Time | 232 ms | ⚡ Average |
-| Slowest Request | 1.80 s | ⚡ Average |
-| Errors | 0% | ⭐ Excellent |
+| Requests/sec | 196 RPS |  Excellent |
+| Avg Response Time | 232 ms |  Average |
+| Slowest Request | 1.80 s |  Average |
+| Errors | 0% |  Excellent |
 
 ### Iteration 3: 10,000 requests with 100 concurrency
 
@@ -210,12 +210,12 @@ ansible-playbook -i inventory.ini deploy.yml --ask-become-pass
 
 | Metric | Value | Rating |
 |--------|-------|--------|
-| Requests/sec | 371 RPS | ⭐ Excellent |
-| Avg Response Time | 254 ms | ⚡ Average |
-| Slowest Request | 2.73 s | ⚡ Average |
-| Errors | 0% | ⭐ Excellent |
+| Requests/sec | 371 RPS |  Excellent |
+| Avg Response Time | 254 ms |  Average |
+| Slowest Request | 2.73 s |  Average |
+| Errors | 0% |  Excellent |
 
-## 📈 Performance Analysis
+##  Performance Analysis
 
 ### Key Findings
 
@@ -240,15 +240,15 @@ ansible-playbook -i inventory.ini deploy.yml --ask-become-pass
 - Optimize database queries and indexes
 - Consider horizontal scaling for high-load scenarios
 
-## 🛡️ Security Features
+##  Security Features
 
-- 🔐 SSH key authentication (no passwords)
-- 🔥 UFW firewall with minimal open ports
-- 👤 Non-root users in containers
-- 📝 .gitignore for secrets and sensitive data
-- 🔒 Secure environment variable management
+-  SSH key authentication (no passwords)
+-  UFW firewall with minimal open ports
+-  Non-root users in containers
+-  .gitignore for secrets and sensitive data
+-  Secure environment variable management
 
-## 📱 Application Screenshots
+##  Application Screenshots
 
 - Desktop View:
 
@@ -274,17 +274,17 @@ ansible-playbook -i inventory.ini deploy.yml --ask-become-pass
 
 ---
 
-## ✨ Key Achievements
+##  Key Achievements
 
-- ✅ 11 interconnected containers in unified network
-- ✅ Dual PostgreSQL databases with dedicated purposes
-- ✅ Full-stack monitoring with custom dashboards
-- ✅ Automated deployment with Ansible
-- ✅ Comprehensive load testing and analysis
-- ✅ Responsive web design for all devices
-- ✅ Security best practices implemented
+-  11 interconnected containers in unified network
+-  Dual PostgreSQL databases with dedicated purposes
+-  Full-stack monitoring with custom dashboards
+-  Automated deployment with Ansible
+-  Comprehensive load testing and analysis
+-  Responsive web design for all devices
+-  Security best practices implemented
 
-## 🛠️ Built With
+##  Built With
 
 - [Flask](https://flask.palletsprojects.com/) - Web framework
 - [PostgreSQL](https://www.postgresql.org/) - Database
@@ -295,20 +295,20 @@ ansible-playbook -i inventory.ini deploy.yml --ask-become-pass
 - [Ansible](https://www.ansible.com/) - Automation
 - [Portainer](https://www.portainer.io/) - Docker management
 
-## 👨‍💻 Author
+##  Author
 
 **Daniil**
 - GitHub: [@Daniil745](https://github.com/Daniil745)
 - Project Link: [https://github.com/Daniil745/todo-app-devops](https://github.com/Daniil745/todo-app-devops)
 
-## 📄 License
+##  License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
 <div align="center">
-  <sub>If you found this project helpful, please give it a ⭐!</sub>
+  <sub>If you found this project helpful, please give it a star :)!</sub>
   <br>
   <sub>Built with ❤️ for the DevOps community</sub>
 </div>
