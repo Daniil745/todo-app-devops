@@ -17,7 +17,7 @@
 
 ## 📋 Overview
 
-
+![image alt](https://github.com/Daniil745/todo-app-devops/blob/68a33befac323f25527c2ee06d17a21eeebc68e0/screenshots/architecture.png)
 
 This project demonstrates a **production-ready DevOps stack** deployed on VirtualBox, consisting of **11 containers**, **2 PostgreSQL databases**, and **full monitoring** capabilities. It showcases best practices in containerization, orchestration, monitoring, and automation.
 
@@ -159,9 +159,9 @@ ansible-playbook -i inventory.ini deploy.yml --ask-become-pass
 
 ## 📊 Monitoring Dashboards
 
-> **Note:** Add your dashboard screenshots here
-- Node Exporter Dashboard: `[Screenshot Placeholder]`
-- PostgreSQL Dashboard: `[Screenshot Placeholder]`
+- Node Exporter Dashboard: ![image alt](https://github.com/Daniil745/todo-app-devops/blob/68a33befac323f25527c2ee06d17a21eeebc68e0/screenshots/node%20exporter%20first%20dashboard.png)
+- PostgreSQL Dashboard:
+![image alt](https://github.com/Daniil745/todo-app-devops/blob/68a33befac323f25527c2ee06d17a21eeebc68e0/screenshots/node%20exporter%20second%20dashboard.png)
 
 ## 🏋️ Load Testing Results
 
@@ -172,6 +172,12 @@ ansible-playbook -i inventory.ini deploy.yml --ask-become-pass
 
 ### Iteration 1: 1,000 requests with 10 concurrency
 
+---
+
+![image alt](https://github.com/Daniil745/todo-app-devops/blob/68a33befac323f25527c2ee06d17a21eeebc68e0/screenshots/first%20testing.png)
+
+---
+
 | Metric | Value | Rating |
 |--------|-------|--------|
 | Requests/sec | 134 RPS | ⭐ Excellent |
@@ -181,6 +187,12 @@ ansible-playbook -i inventory.ini deploy.yml --ask-become-pass
 
 ### Iteration 2: 5,000 requests with 50 concurrency
 
+---
+
+![image alt](https://github.com/Daniil745/todo-app-devops/blob/68a33befac323f25527c2ee06d17a21eeebc68e0/screenshots/second%20testing.png)
+
+---
+
 | Metric | Value | Rating |
 |--------|-------|--------|
 | Requests/sec | 196 RPS | ⭐ Excellent |
@@ -189,6 +201,12 @@ ansible-playbook -i inventory.ini deploy.yml --ask-become-pass
 | Errors | 0% | ⭐ Excellent |
 
 ### Iteration 3: 10,000 requests with 100 concurrency
+
+---
+
+![image alt](https://github.com/Daniil745/todo-app-devops/blob/68a33befac323f25527c2ee06d17a21eeebc68e0/screenshots/third%20testing.png)
+
+---
 
 | Metric | Value | Rating |
 |--------|-------|--------|
@@ -232,9 +250,29 @@ ansible-playbook -i inventory.ini deploy.yml --ask-become-pass
 
 ## 📱 Application Screenshots
 
-> **Note:** Add your application screenshots here
-- Desktop View: `[Screenshot Placeholder]`
-- Mobile View: `[Screenshot Placeholder]`
+- Desktop View:
+
+---
+
+![image alt](https://github.com/Daniil745/todo-app-devops/blob/68a33befac323f25527c2ee06d17a21eeebc68e0/screenshots/first%20pc%20screen.png)
+
+---
+
+![image alt](https://github.com/Daniil745/todo-app-devops/blob/68a33befac323f25527c2ee06d17a21eeebc68e0/screenshots/second%20pc%20screen.png)
+
+---
+
+- Mobile View:
+
+---
+
+![image alt](https://github.com/Daniil745/todo-app-devops/blob/68a33befac323f25527c2ee06d17a21eeebc68e0/screenshots/first%20screen%20mobile.jpg)
+
+---
+
+![image alt](https://github.com/Daniil745/todo-app-devops/blob/68a33befac323f25527c2ee06d17a21eeebc68e0/screenshots/second%20screen%20mobile.jpg)
+
+---
 
 ## ✨ Key Achievements
 
@@ -266,12 +304,6 @@ ansible-playbook -i inventory.ini deploy.yml --ask-become-pass
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- Thanks to the open-source community for amazing tools
-- Inspired by production DevOps practices
-- Built with best practices in container orchestration
 
 ---
 
